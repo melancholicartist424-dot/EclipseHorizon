@@ -1,0 +1,121 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/Game.gd" id=1]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id=2]
+[ext_resource type="Script" path="res://scripts/World.gd" id=3]
+[ext_resource type="PackedScene" path="res://scenes/Mon.tscn" id=4]
+[ext_resource type="Script" path="res://scripts/MapStack.gd" id=5]
+[ext_resource type="Script" path="res://scripts/DoomView.gd" id=6]
+[ext_resource type="Script" path="res://scripts/Extraction.gd" id=7]
+[ext_resource type="Script" path="res://scripts/WarmSpot.gd" id=8]
+
+[sub_resource type="RectangleShape2D" id=1]
+size = Vector2(60, 60)
+
+[node name="Main" type="Node2D"]
+script = ExtResource(1)
+
+[node name="Backdrop" type="ColorRect" parent="."]
+color = Color(0.05, 0.05, 0.08, 1)
+size = Vector2(1280, 720)
+
+[node name="World" type="Node2D" parent="."]
+script = ExtResource(3)
+
+[node name="MapStack" type="Node" parent="World"]
+script = ExtResource(5)
+
+[node name="Player" parent="." instance=ExtResource(2)]
+position = Vector2(640, 360)
+
+[node name="MonA" parent="." instance=ExtResource(4)]
+position = Vector2(360, 280)
+mon_name = "Frostling"
+max_health = 3
+wander_radius_feet = 5.0
+wander_speed_feet = 3.5
+flee_speed_feet = 7.5
+cold_tolerance = 70
+heat_tolerance = 170
+capture_resistance = 20
+mass = 1
+composure = 1
+drop_meat = 1
+drop_essence = 1
+
+[node name="MonB" parent="." instance=ExtResource(4)]
+position = Vector2(880, 420)
+mon_name = "Bogwisp"
+max_health = 5
+wander_radius_feet = 7.0
+wander_speed_feet = 3.0
+flee_speed_feet = 6.5
+cold_tolerance = 95
+heat_tolerance = 160
+capture_resistance = 28
+mass = 2
+composure = 3
+drop_meat = 2
+drop_essence = 2
+
+[node name="MonC" parent="." instance=ExtResource(4)]
+position = Vector2(720, 200)
+mon_name = "Glintjaw"
+max_health = 4
+wander_radius_feet = 8.0
+wander_speed_feet = 4.0
+flee_speed_feet = 9.0
+cold_tolerance = 80
+heat_tolerance = 190
+capture_resistance = 30
+mass = 2
+composure = 2
+drop_meat = 3
+drop_essence = 3
+
+[node name="Extraction" type="Area2D" parent="."]
+position = Vector2(1180, 640)
+script = ExtResource(7)
+
+[node name="ExtractionShape" type="CollisionShape2D" parent="Extraction"]
+shape = SubResource(1)
+
+[node name="WarmSpot" type="Area2D" parent="."]
+position = Vector2(96, 360)
+script = ExtResource(8)
+
+[node name="WarmSpotShape" type="CollisionShape2D" parent="WarmSpot"]
+shape = SubResource(1)
+
+[node name="Fog" type="ColorRect" parent="."]
+color = Color(0.12, 0.1, 0.18, 0.35)
+size = Vector2(1280, 720)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="UI"]
+text = "Eldritch Hollow"
+position = Vector2(32, 24)
+
+[node name="DoomView" type="Node2D" parent="UI"]
+position = Vector2(720, 24)
+script = ExtResource(6)
+map_stack_path = NodePath("../../World/MapStack")
+player_path = NodePath("../../Player")
+view_size = Vector2(520, 260)
+
+[node name="Instructions" type="Label" parent="UI"]
+text = "WASD/Arrows move | Shift sprint | E interact | Space attack | F eat | R forage | C net | Q snare | Z craft net | X craft snare"
+position = Vector2(32, 54)
+
+[node name="HungerLabel" type="Label" parent="UI"]
+text = "Hunger: 100/100"
+position = Vector2(32, 84)
+
+[node name="InventoryLabel" type="Label" parent="UI"]
+text = "Inventory: Meat 0 | Essence 0"
+position = Vector2(32, 114)
+
+[node name="PartyLabel" type="Label" parent="UI"]
+text = "Party: None"
+position = Vector2(32, 144)
